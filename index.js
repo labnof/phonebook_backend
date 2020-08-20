@@ -3,9 +3,10 @@ const morgan = require('morgan')
 // const morganBody = require('morgan-body') 
 // const bodyParser = require('body-parser') 
 const app = express()
+const cors = require('cors') //  same origin policy and CORS a
 
 
-
+app.use(cors())
 app.use(express.json())
 morgan.token('content', function (req, res) { 
   body = JSON.stringify(req.body)
