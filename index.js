@@ -1,21 +1,25 @@
+// Modules importations
 const express = require('express')
 const morgan = require('morgan')
-// const morganBody = require('morgan-body') 
-// const bodyParser = require('body-parser') 
 const app = express()
 const cors = require('cors') //  same origin policy and CORS a
+// const morganBody = require('morgan-body') 
+// const bodyParser = require('body-parser') 
 
 
-app.use(cors())
-app.use(express.json())
+// Morgan token for request loges
 morgan.token('content', function (req, res) { 
   body = JSON.stringify(req.body)
   console.log('body', body);
   return (body === {}) ? '' : body
   })// definded morgan token
 const tinyContent = morgan(':method :url :status :res[content-length] - :response-time ms :content')
-app.use(tinyContent)
 
+// Middlewares
+app.use(cors())
+app.use(express.json())
+app.use(express.static('build'))// to let express show static file from build folder
+app.use(tinyContent)
 
 // must parse body before morganBody as body will be logged
 //app.use(bodyParser.json()) 
