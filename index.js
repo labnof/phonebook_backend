@@ -1,6 +1,6 @@
 // Modules importations
 const express = require('express')
-const morgan = require('morgan')
+// const morgan = require('morgan')
 const app = express()
 const cors = require('cors') //  same origin policy and CORS a
 // const morganBody = require('morgan-body') 
@@ -8,12 +8,12 @@ const cors = require('cors') //  same origin policy and CORS a
 
 
 // Morgan token for request loges
-morgan.token('content', function (req, res) { 
+/*morgan.token('content', function (req, res) { 
   body = JSON.stringify(req.body)
   console.log('body', body);
   return (body === {}) ? '' : body
   })// definded morgan token
-const tinyContent = morgan(':method :url :status :res[content-length] - :response-time ms :content')
+const tinyContent = morgan(':method :url :status :res[content-length] - :response-time ms :content')*/
 
 // Middlewares
 app.use(cors())
