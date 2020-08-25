@@ -7,7 +7,7 @@ const cors = require('cors') //  same origin policy and CORS a
 // const bodyParser = require('body-parser') 
 
 
-// Morgan token for request loges
+// Morgan token for request logs
 /*morgan.token('content', function (req, res) { 
   body = JSON.stringify(req.body)
   console.log('body', body);
@@ -19,7 +19,7 @@ const tinyContent = morgan(':method :url :status :res[content-length] - :respons
 app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))// to let express show static file from build folder
-app.use(tinyContent)
+//app.use(tinyContent)
 
 // must parse body before morganBody as body will be logged
 //app.use(bodyParser.json()) 
