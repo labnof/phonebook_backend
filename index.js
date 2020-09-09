@@ -1,44 +1,25 @@
 // Modules importations
 const express = require('express')
+const app = express()
 require('dotenv').config()
 const Person = require('./models/person')
- // to communicate with mongo db
-// const morgan = require('morgan')
-const app = express()
+
 const cors = require('cors') //  same origin policy and CORS a
-// const morganBody = require('morgan-body') 
-// const bodyParser = require('body-parser') 
-
-
-// Morgan token for request logs
-/*morgan.token('content', function (req, res) { 
-  body = JSON.stringify(req.body)
-  console.log('body', body);
-  return (body === {}) ? '' : body
-  })// definded morgan token
-const tinyContent = morgan(':method :url :status :res[content-length] - :response-time ms :content')*/
 
 // Middlewares
 app.use(cors())
 app.use(express.json())
-app.use(express.static('build'))// to let express show static file from build folder
-//app.use(tinyContent)
-
-// must parse body before morganBody as body will be logged
-//app.use(bodyParser.json()) 
-// hook morganBody to express app
-//morganBody(app)
-
-
-
+app.use(express.static('build')) // to let express show static file from build folder
 
 
 app.get('/', (req, res) => {
   res.send('<h1>Phonebook</h1>')
 })
 app.get('/info', (req, res) => {
-  res.send(`<div><h3>Phonebook has info for ${persons.length}
+  Person.find({}).then(persons => {
+    res.send(`<div><h3>Phonebook has info for ${persons.length}
      people.</h3><p>${new Date()}</></div>`)
+  })
 })
 
 app.get('/api/persons', (req, res) => {
@@ -49,19 +30,19 @@ app.get('/api/persons', (req, res) => {
 
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
-  .then(person => {
-    if (person) {
-      response.json(person.toJSON())
-    } else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+    .then(person => {
+      if (person) {
+        response.json(person.toJSON())
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -73,29 +54,28 @@ app.post('/api/persons', (request, response, next) => {
     return response.status(400).json({
       error: 'name or number missing'
     })
-  } 
+  }
   const person = new Person({
     name: body.name,
-    number: body.number,
+    number: body.number
   })
   person
-  .save()
-  .then(savedPerson => {
-    return savedPerson.toJSON()
-  })
-  .then(savedAndFormattedPerson => {
-    response.json(savedAndFormattedPerson)
-  }) 
-  .catch(error => next(error)) 
+    .save()
+    .then(savedPerson => {
+      return savedPerson.toJSON()
+    })
+    .then(savedAndFormattedPerson => {
+      response.json(savedAndFormattedPerson)
+    })
+    .catch(error => next(error))
 })
-
 
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
 
   const person = {
     name: body.name,
-    number: body.number,
+    number: body.number
   }
 
   Person.findByIdAndUpdate(request.params.id, person, { new: true })
@@ -105,8 +85,7 @@ app.put('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-//Error handling 
-
+// Error handling
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
@@ -116,7 +95,7 @@ app.use(unknownEndpoint)
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
-  if (error.name === 'CastError' && error.kind == 'ObjectId') {
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return response.status(400).send({ error: 'malformatted id' })
   }  else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
@@ -127,7 +106,7 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT 
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

@@ -11,6 +11,7 @@
     "deploy": "git push heroku master",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
     "logs:prod": "heroku logs --tail",
+    "lint": "eslint .",
     "dfopen": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy && heroku open"
   },
   "repository": {
@@ -36,9 +37,9 @@
     "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4",
-    "morgan": "^1.10.0",
     "body-parser": "^1.19.0",
-    "morgan-body": "^2.4.14"
+    "morgan": "^1.10.0",
+    "morgan-body": "^2.4.14",
+    "nodemon": "^2.0.4"
   }
 }
