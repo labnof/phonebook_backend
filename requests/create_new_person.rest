@@ -2,6 +2,6 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Onoriwa kokonen",
-    "number":"+3582354264456"
+    "name": "Lu",
+    "number":"+35377899045"
 }
